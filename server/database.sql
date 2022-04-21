@@ -1,7 +1,7 @@
 CREATE TABLE public.carritos
 (
     id SERIAL NOT NULL,
-    usuario_id integer UNIQUE NOT NULL,
+    cliente_rut character varying(10) UNIQUE NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -27,7 +27,7 @@ CREATE TABLE public.orden_items
 CREATE TABLE public.ordenes
 (
     id SERIAL NOT NULL,
-    usuario_id integer NOT NULL,
+    cliente_rut character varying(10) NOT NULL,
     estado character varying(20) NOT NULL,
     fecha timestamp without time zone DEFAULT CURRENT_DATE NOT NULL,
     monto real,
@@ -41,6 +41,7 @@ CREATE TABLE public.productos
     nombre character varying(50) NOT NULL,
     precio real NOT NULL,
     descripcion text NOT NULL,
+    stock integer,
     url_imagen character varying,
     PRIMARY KEY (id)
 );
@@ -78,8 +79,8 @@ CREATE TABLE public.administradores
 
 
 ALTER TABLE public.carritos
-    ADD FOREIGN KEY (usuario_id)
-    REFERENCES public.usuarios (id)
+    ADD FOREIGN KEY (cliente_rut)
+    REFERENCES public.clientes (rut)
     ON DELETE SET NULL
     NOT VALID;
 
@@ -113,8 +114,8 @@ ALTER TABLE public.orden_items
 
 
 ALTER TABLE public.ordenes
-    ADD FOREIGN KEY (usuario_id)
-    REFERENCES public.usuarios (id)
+    ADD FOREIGN KEY (cliente_rut)
+    REFERENCES public.clientes (rut)
     ON DELETE CASCADE
     NOT VALID;
 
