@@ -4,24 +4,44 @@ const app = express();
 const cors = require("cors");
 
 
-//middleware
+// middleware
 app.use(cors());
 app.use(express.json());
 
 //Rutas
 
 //crear usuario
-//obtener usuario
-//actualizar usuario
-//eliminar usuario
+app.post("/usuarios", async (req, res) => {
+    try {
+      const { correo, nombre, apellido_p, apellido_m } = req.body;
+      const newUsuario = await pool.query(
+        "INSERT INTO usuarios (correo, nombre, apellido_p, apellido_m, fecha_ingreso) VALUES($1, $2, $3, $4, now()) RETURNING usuarios.id",
+        [correo, nombre, apellido_p, apellido_m]
+      );
+      res.json(newUsuario.rows[0]);
+    } catch (err) {
+      console.error(err.message);
+    }
+  });
+//crear administrador
+app.post("/admins", async (req, res) => {
+    try {
+      const {usuario_id, password} = req.body;
+      const newAdmin = await pool.query(
+        "INSERT INTO administradores (id_usuario, password) VALUES($1, $2) RETURNING administradores.id",
+        [usuario_id, password]
+      );
+      res.json(newAdmin.rows[0]);
+    } catch (err) {
+      console.error(err.message);
+    }
+  });
 
-//crear producto
-//obtener producto
-//actualizar producto
-//eliminar producto
 
 
-app.listen(5000, () => {
-    console.log("server has startd on port 5000");
+
+
+app.listen(3000, () => {
+    console.log("server has startd on port 3000");
 
 }); 
