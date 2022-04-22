@@ -81,6 +81,75 @@ app.post("/clientes/login", async (req, res) => {
   }
 }); 
 
+//CRUD producto
+
+app.post("/productos", async (req, res) => {
+  try {
+    const { nombre, precio, descripcion, stock, url_imagen } = req.body;
+    const newProducto = await pool.query(
+      "INSERT INTO productos (nombre, precio, descripcion, stock, url_imagen) VALUES($1, $2, $3, $4, $5) RETURNING productos.id",
+      [nombre, precio, descripcion, stock, url_imagen]
+    );
+    res.json(newProducto.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/productos", async (req, res) => {
+  try {
+    const allProductos = await pool.query(
+      "SELECT * FROM productos order by productos.id"
+    );
+    res.json(allProductos.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/productos/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const producto = await pool.query(
+      "SELECT * FROM productos WHERE productos.id = $1",
+      [id]
+    );
+
+    res.json(producto.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.put("/productos/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {nombre, precio, descripcion, stock, url_imagen} = req.body;
+    const updateProducto = await pool.query(
+      "UPDATE productos SET nombre = $1, precio = $2, descripcion = $3, stock = $4, url_imagen = $5 WHERE productos.id = $6",
+      [nombre, precio, descripcion, stock, url_imagen, id ]
+    );
+
+    res.json("Producto actualizado!");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.delete("/productos/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteProducto = await pool.query(
+      "DELETE FROM productos WHERE productos.id= $1",
+      [id]
+    );
+    res.json("Producto eliminado!");
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
+
 
 app.listen(3000, () => {
     console.log("server has startd on port 3000");
