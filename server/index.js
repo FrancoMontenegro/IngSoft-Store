@@ -28,7 +28,7 @@ app.post("/admins", async (req, res) => {
     try {
       const {usuario_id, password} = req.body;
       const newAdmin = await pool.query(
-        "INSERT INTO administradores (id_usuario, password) VALUES($1, $2) RETURNING administradores.id",
+        "INSERT INTO administradores (usuario_id, password) VALUES($1, $2) RETURNING administradores.id",
         [usuario_id, password]
       );
       res.json(newAdmin.rows[0]);
@@ -37,6 +37,19 @@ app.post("/admins", async (req, res) => {
     }
   });
 
+//crear cliente
+app.post("/clientes", async (req, res) => {
+  try {
+    const {rut, usuario_id, password, celular, direccion, comuna} = req.body;
+    const newCliente = await pool.query(
+      "INSERT INTO clientes (rut, usuario_id, password, celular, direccion, comuna, estado) VALUES($1, $2, $3, $4, $5, $6, TRUE) RETURNING clientes.rut",
+      [rut, usuario_id, password, celular, direccion, comuna]
+    );
+    res.json(newCliente.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 
 
