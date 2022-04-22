@@ -66,7 +66,7 @@ app.post("/admins/login", async (req, res) => {
   }
 }); 
 
-//Login admin
+//Login cliente
 
 app.post("/clientes/login", async (req, res) => {
   try {
