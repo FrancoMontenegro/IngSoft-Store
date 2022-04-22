@@ -10,7 +10,8 @@ app.use(express.json());
 
 //Rutas
 
-//crear usuario
+//crear usuario, administrador y cliente
+
 app.post("/usuarios", async (req, res) => {
     try {
       const { correo, nombre, apellido_p, apellido_m } = req.body;
@@ -23,7 +24,7 @@ app.post("/usuarios", async (req, res) => {
       console.error(err.message);
     }
   });
-//crear administrador
+
 app.post("/admins", async (req, res) => {
     try {
       const {usuario_id, password} = req.body;
@@ -37,7 +38,6 @@ app.post("/admins", async (req, res) => {
     }
   });
 
-//crear cliente
 app.post("/clientes", async (req, res) => {
   try {
     const {rut, usuario_id, password, celular, direccion, comuna} = req.body;
@@ -51,7 +51,35 @@ app.post("/clientes", async (req, res) => {
   }
 });
 
+//Login admin
 
+app.post("/admins/login", async (req, res) => {
+  try {
+    const { correo,password } = req.body;
+    const administrador = await pool.query("select * from usuarios, administradores where usuarios.id = administradores.usuario_id and usuarios.correo = $1 and administradores.password = $2", [
+      correo,password
+    ]);
+
+    res.json(administrador.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+}); 
+
+//Login admin
+
+app.post("/clientes/login", async (req, res) => {
+  try {
+    const { correo,password } = req.body;
+    const cliente = await pool.query("select * from usuarios, clientes where usuarios.id = clientes.usuario_id and usuarios.correo = $1 and clientes.password = $2", [
+      correo,password
+    ]);
+
+    res.json(cliente.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+}); 
 
 
 app.listen(3000, () => {
