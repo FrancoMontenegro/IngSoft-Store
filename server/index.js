@@ -10,27 +10,14 @@ app.use(express.json());
 
 //Rutas
 
-//crear usuario, administrador y cliente
-
-app.post("/usuarios", async (req, res) => {
-    try {
-      const { correo, nombre, apellido_p, apellido_m } = req.body;
-      const newUsuario = await pool.query(
-        "INSERT INTO usuarios (correo, nombre, apellido_p, apellido_m, fecha_ingreso) VALUES($1, $2, $3, $4, now()) RETURNING usuarios.id",
-        [correo, nombre, apellido_p, apellido_m]
-      );
-      res.json(newUsuario.rows[0]);
-    } catch (err) {
-      console.error(err.message);
-    }
-  });
+//crear administrador y cliente
 
 app.post("/admins", async (req, res) => {
     try {
-      const {usuario_id, password} = req.body;
+      const {rut ,correo, password, nombre, apellido_p, apellido_m, celular, direccion, comuna} = req.body;
       const newAdmin = await pool.query(
-        "INSERT INTO administradores (usuario_id, password) VALUES($1, $2) RETURNING administradores.id",
-        [usuario_id, password]
+        "INSERT INTO usuarios (rol, rut ,correo, password, nombre, apellido_p, apellido_m, celular, direccion, comuna, estado, fecha_ingreso) VALUES('administrador',$1, $2, $3, $4, $5, $6, $7, $8, $9, TRUE, now()) RETURNING usuarios.id",
+        [rut, correo, password, nombre, apellido_p, apellido_m, celular, direccion, comuna]
       );
       res.json(newAdmin.rows[0]);
     } catch (err) {
@@ -40,12 +27,58 @@ app.post("/admins", async (req, res) => {
 
 app.post("/clientes", async (req, res) => {
   try {
-    const {rut, usuario_id, password, celular, direccion, comuna} = req.body;
+    const {rut ,correo, password, nombre, apellido_p, apellido_m, celular, direccion, comuna} = req.body;
     const newCliente = await pool.query(
-      "INSERT INTO clientes (rut, usuario_id, password, celular, direccion, comuna, estado) VALUES($1, $2, $3, $4, $5, $6, TRUE) RETURNING clientes.rut",
-      [rut, usuario_id, password, celular, direccion, comuna]
-    );
+      "INSERT INTO usuarios (rol, rut ,correo, password, nombre, apellido_p, apellido_m, celular, direccion, comuna, estado, fecha_ingreso) VALUES('cliente',$1, $2, $3, $4, $5, $6, $7, $8, $9, TRUE, now()) RETURNING usuarios.id",
+        [rut, correo, password, nombre, apellido_p, apellido_m, celular, direccion, comuna]
+      );
     res.json(newCliente.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//Actualizar usuario
+
+app.put("/clientes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {correo, password, celular, direccion, comuna} = req.body;
+    const updateCliente = await pool.query(
+      "UPDATE usuarios SET correo = $1, password = $2, celular = $3, direccion = $4, comuna = $5 WHERE usuarios.id = $6",
+      [correo, password, celular, direccion, comuna, id]
+    );
+
+    res.json("Cliente actualizado!");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//Dar de baja usuario
+
+app.put("/clientes/delete/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateCliente = await pool.query(
+      "UPDATE usuarios SET estado = FALSE WHERE usuarios.id = $1",
+      [id]
+    );
+
+    res.json("Cliente de Baja!");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//obtener todos los clientes activos
+
+app.get("/clientes", async (req, res) => {
+  try {
+    const allClientes = await pool.query(
+      "SELECT * FROM usuarios WHERE usuarios.rol = 'cliente' AND usuarios.estado = 'TRUE' order by usuarios.id"
+    );
+    res.json(allClientes.rows);
   } catch (err) {
     console.error(err.message);
   }
@@ -56,7 +89,7 @@ app.post("/clientes", async (req, res) => {
 app.post("/admins/login", async (req, res) => {
   try {
     const { correo,password } = req.body;
-    const administrador = await pool.query("select * from usuarios, administradores where usuarios.id = administradores.usuario_id and usuarios.correo = $1 and administradores.password = $2", [
+    const administrador = await pool.query("select * from usuarios where usuarios.rol = 'administrador' and usuarios.correo = $1 and usuarios.password = $2", [
       correo,password
     ]);
 
@@ -71,7 +104,7 @@ app.post("/admins/login", async (req, res) => {
 app.post("/clientes/login", async (req, res) => {
   try {
     const { correo,password } = req.body;
-    const cliente = await pool.query("select * from usuarios, clientes where usuarios.id = clientes.usuario_id and usuarios.correo = $1 and clientes.password = $2", [
+    const cliente = await pool.query("select * from usuarios where usuarios.rol = 'cliente' and usuarios.correo = $1 and usuarios.password = $2", [
       correo,password
     ]);
 
@@ -85,10 +118,10 @@ app.post("/clientes/login", async (req, res) => {
 
 app.post("/productos", async (req, res) => {
   try {
-    const { nombre, precio, descripcion, stock, url_imagen } = req.body;
+    const { nombre, precio, categoria, descripcion, stock, url_imagen } = req.body;
     const newProducto = await pool.query(
-      "INSERT INTO productos (nombre, precio, descripcion, stock, url_imagen) VALUES($1, $2, $3, $4, $5) RETURNING productos.id",
-      [nombre, precio, descripcion, stock, url_imagen]
+      "INSERT INTO productos (nombre, precio, categoria, descripcion, stock, url_imagen) VALUES($1, $2, $3, $4, $5, $6) RETURNING productos.id",
+      [nombre, precio, categoria, descripcion, stock, url_imagen]
     );
     res.json(newProducto.rows[0]);
   } catch (err) {

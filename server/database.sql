@@ -1,7 +1,7 @@
 CREATE TABLE public.carritos
 (
     id SERIAL NOT NULL,
-    cliente_rut character varying(10) UNIQUE NOT NULL,
+    usuario_rut character varying(10) UNIQUE NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -27,7 +27,7 @@ CREATE TABLE public.orden_items
 CREATE TABLE public.ordenes
 (
     id SERIAL NOT NULL,
-    cliente_rut character varying(10) NOT NULL,
+    usuario_rut character varying(10) NOT NULL,
     estado character varying(20) NOT NULL,
     fecha timestamp without time zone DEFAULT CURRENT_DATE NOT NULL,
     monto real,
@@ -40,6 +40,7 @@ CREATE TABLE public.productos
     id SERIAL NOT NULL,
     nombre character varying(50) NOT NULL,
     precio real NOT NULL,
+    categoria character varying(50),
     descripcion text NOT NULL,
     stock integer,
     url_imagen character varying,
@@ -49,38 +50,24 @@ CREATE TABLE public.productos
 CREATE TABLE public.usuarios
 (
     id SERIAL NOT NULL,
+    rol character varying(20),
+    rut character varying(10),
     correo character varying(100) UNIQUE NOT NULL,
+    password character varying(200),
     nombre character varying(100) NOT NULL,
     apellido_p character varying(100) NOT NULL,
     apellido_m character varying(100) NOT NULL,
-    fecha_ingreso timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE public.clientes
-(
-    rut character varying(10),
-    usuario_id integer NOT NULL,
-    password character varying(200),
     celular integer,
     direccion character varying(200),
     comuna character varying(100),
     estado boolean,
+    fecha_ingreso timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (rut)
 );
 
-CREATE TABLE public.administradores
-(
-    id SERIAL NOT NULL,
-    usuario_id integer NOT NULL,
-    password character varying(200),
-    PRIMARY KEY (id)
-);
-
-
 ALTER TABLE public.carritos
-    ADD FOREIGN KEY (cliente_rut)
-    REFERENCES public.clientes (rut)
+    ADD FOREIGN KEY (usuario_rut)
+    REFERENCES public.usuarios (rut)
     ON DELETE SET NULL
     NOT VALID;
 
@@ -114,19 +101,8 @@ ALTER TABLE public.orden_items
 
 
 ALTER TABLE public.ordenes
-    ADD FOREIGN KEY (cliente_rut)
-    REFERENCES public.clientes (rut)
+    ADD FOREIGN KEY (usuario_rut)
+    REFERENCES public.usuarios (rut)
     ON DELETE CASCADE
     NOT VALID;
 
-ALTER TABLE public.clientes
-    ADD FOREIGN KEY (usuario_id)
-    REFERENCES public.usuarios (id)
-    ON DELETE CASCADE
-    NOT VALID;
-
-ALTER TABLE public.administradores
-    ADD FOREIGN KEY (usuario_id)
-    REFERENCES public.usuarios (id)
-    ON DELETE CASCADE
-    NOT VALID;
