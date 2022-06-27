@@ -184,7 +184,7 @@ app.delete("/productos/:id", async (req, res) => {
 
 
 
-app.listen(3000, () => {
-    console.log("server has startd on port 3000");
+app.listen(3001, () => {
+    console.log("server has startd on port 3001");
 
 }); 
