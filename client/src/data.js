@@ -27,7 +27,7 @@ export const sliderItems = [
       id: 1,
       img: "https://i.ibb.co/5Gd8FcX/desayuno.png",
       title: "DESAYUNOS",
-      cat:"desayunos"
+      cat:"desayuno"
     },
     {
       id: 2,

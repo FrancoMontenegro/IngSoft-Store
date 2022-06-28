@@ -5,7 +5,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Redirect,
+  Navigate,
 } from "react-router-dom";
 import Product from "./pages/Product";
 import Register from "./pages/Register";
@@ -15,11 +15,27 @@ import Cart from "./pages/Cart";
 //import { useSelector } from "react-redux";
 
 const App = () => {
-  //const user = useSelector((state) => state.user.currentUser);
+  const user = true;
   return (
     <Router>
       <Routes>
         <Route exact path='/' element={<Home/>} />
+      </Routes>
+      <Routes>
+        <Route exact path='/products/:categoria' element={<ProductList/>} />
+      </Routes>
+      <Routes>
+        <Route exact path='/product/:id' element={<Product/>} />
+      </Routes>
+      <Routes>
+        <Route exact path='/cart' element={<Cart/>} />
+      </Routes>
+      <Routes>
+        <Route exact path='/login' element={user ? <Navigate to="/"/> : <Login/>} />
+        
+      </Routes>
+      <Routes>
+        <Route exact path='/register' element={<Register/>} />
       </Routes>
     </Router>
   );

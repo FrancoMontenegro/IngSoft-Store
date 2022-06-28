@@ -6,7 +6,6 @@ import Footer from "../components/Footer";
 import { mobile } from "../responsive";
 import { useLocation } from "react-router";
 import { useState } from "react";
-import { TitleTwoTone } from "@mui/icons-material";
 
 const Container = styled.div``;
 
@@ -39,6 +38,10 @@ const Select = styled.select`
 const Option = styled.option``;
 
 const ProductList = () => {
+  const location = useLocation();
+  const cat = location.pathname.split("/")[2];
+  const [sort, setSort] = useState({});
+
   return (
     <Container>
       <Navbar/>
@@ -48,24 +51,25 @@ const ProductList = () => {
         <Filter>
           <FilterText>Filtrar productos</FilterText>
           <Select>
-            <Option disable selected>
+            <Option>
               Categoría
             </Option>
-            <Option>Desayunos</Option>
+            <Option>Desayuno</Option>
             <Option>Tablas</Option>
             <Option>Otros</Option>
           </Select>
         </Filter>
         <Filter>
           <FilterText>Ordernar productos</FilterText>
-          <Select>
-            <Option disable selected>Precio</Option>
-            <Option>Precio (mayor a menor)</Option>
-            <Option>Precio (menor a mayor)</Option>
+          <Select onChange={e=>setSort(e.target.value)}>
+            <Option>Precio</Option>
+            <Option value="desc">Precio (mayor a menor)</Option>
+            <Option value="asc">Precio (menor a mayor)</Option>
           </Select>
         </Filter>
       </FilterContainer>
-      <Products/>
+      <Products cat={cat} sort={sort}/>
+      <Footer />
     </Container>
   )
 }

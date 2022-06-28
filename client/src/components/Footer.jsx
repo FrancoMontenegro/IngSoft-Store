@@ -5,7 +5,6 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import RoomIcon from '@mui/icons-material/Room';
 import styled from "styled-components";
 import { mobile } from "../responsive";
-//import {Facebook, Instagram, MailOutline, Phone, Pinterest, Room, Twitter,} from "@material-ui/icons";
   
   
 const Container = styled.div`
@@ -52,18 +51,6 @@ const Title = styled.h3`
   margin-bottom: 30px;
 `;
 
-const List = styled.ul`
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const ListItem = styled.li`
-  width: 50%;
-  margin-bottom: 10px;
-`;
 
 const Right = styled.div`
   flex: 1;
