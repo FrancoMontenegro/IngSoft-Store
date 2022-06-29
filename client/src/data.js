@@ -8,17 +8,17 @@ export const sliderItems = [
     },
     {
       id: 2,
-      img: "https://i.ibb.co/DG69bQ4/2.png",
-      title: "AUTUMN COLLECTION",
-      desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
-      bg: "fcf1ed",
+      img: "https://i.ibb.co/thyXBQW/31532f18ac863fd509bc8cf9ea794576.jpg" ,
+      title: "REGALOS PERSONALIZADOS!",
+      desc: "DETALLITOS QUE ALEGRAN!.",
+      bg: "e2f0fb",
     },
     {
       id: 3,
-      img: "https://i.ibb.co/cXFnLLV/3.png",
-      title: "LOUNGEWEAR LOVE",
-      desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
-      bg: "fbf0f4",
+      img: "https://i.ibb.co/wYfQq7J/GLOBO-BURBUJA-CONFETTI-F-C-NEGRO-DORADO-X1-UNI.jpg",
+      title: "DESEA UN FELIZ CUMPLEAÑOS!",
+      desc: "SORPRENDE!",
+      bg: "F1F1F1",
     },
   ];
 

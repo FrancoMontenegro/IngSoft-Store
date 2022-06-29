@@ -44,7 +44,7 @@ export default function Sidebar() {
             <Link to="/users" className="link">
               <li className="sidebarListItem">
                 <PermIdentity className="sidebarIcon" />
-                Usuarios
+                Usuarios (NF)
               </li>
             </Link>
             <Link to="/products" className="link">

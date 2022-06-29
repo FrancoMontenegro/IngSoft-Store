@@ -74,9 +74,8 @@ const Payment = styled.img`
         <Left>
           <Logo>DOLCE TENTAZIONE.</Logo>
           <Desc>
-            There are many variations of passages of Lorem Ipsum available, but
-            the majority have suffered alteration in some form, by injected
-            humour, or randomised words which don’t look even slightly believable.
+          Dolce Tentazione Chile es un emprendimiento a cargo de Támara Costa y Sebastián Gutiérrez dedicado a la elaboración y venta de giftboxs decorativos. El objetivo es establecer una unión entre nuestros clientes y nosotros para brindar las más dulces experiencias y sensaciones a sus seres queridos a través de nuestros detalles los cuales constan principalmente de desayunos personalizados, tablas de picoteo y arreglos de rosas.
+
           </Desc>
           <SocialContainer>
             <SocialIcon color="3B5999">
@@ -92,13 +91,13 @@ const Payment = styled.img`
         <Right>
           <Title>Contacto</Title>
           <ContactItem>
-            <RoomIcon style={{marginRight:"10px"}}/> 622 Dixie Path , South Tobinchester 98336
+            <RoomIcon style={{marginRight:"10px"}}/> Envíos a todo Santiago!
           </ContactItem>
           <ContactItem>
-            <PhoneIcon style={{marginRight:"10px"}}/> +1 234 56 78
+            <PhoneIcon style={{marginRight:"10px"}}/> +56 9 7440 3376
           </ContactItem>
           <ContactItem>
-            <MailOutlineIcon style={{marginRight:"10px"}} /> contact@lama.dev
+            <MailOutlineIcon style={{marginRight:"10px"}} /> contacto@dolcetentazione.cl
           </ContactItem>
           <Payment src="https://i.ibb.co/Qfvn4z6/payment.png" />
         </Right>
