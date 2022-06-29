@@ -1,5 +1,9 @@
+import { useState } from "react";
 import styled from "styled-components";
+import { login } from "../redux/apiCalls";
 import {mobile} from "../responsive";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const Container = styled.div`
   width: 100vw;
@@ -8,7 +12,7 @@ const Container = styled.div`
       rgba(255, 255, 255, 0.5),
       rgba(255, 255, 255, 0.5)
     ),
-    url("https://images.pexels.com/photos/6984650/pexels-photo-6984650.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940")
+    url("https://i.ibb.co/TTZxqph/loginbg.jpg")
       center;
   background-size: cover;
   display: flex;
@@ -44,7 +48,7 @@ const Button = styled.button`
   width: 40%;
   border: none;
   padding: 15px 20px;
-  background-color: teal;
+  background-color: #d0c09e;
   color: white;
   cursor: pointer;
   margin-bottom: 10px;
@@ -56,16 +60,32 @@ const Link = styled.a`
   text-decoration: underline;
   cursor: pointer;
 `;
+const Error = styled.span`
+  color: red;
+`;
 
 const Login = () => {
+  const [correo, setCorreo] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const { isFetching, error } = useSelector((state) => state.user);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    login(dispatch, { correo, password });
+  };
+
   return (
     <Container>
       <Wrapper>
         <Title>INGRESAR</Title>
         <Form>
-          <Input placeholder="correo" />
-          <Input placeholder="contraseña" />
-          <Button>INGRESAR</Button>
+          <Input placeholder="correo" onChange={(e) => setCorreo(e.target.value)}
+          />
+          <Input placeholder="contraseña" type="password" onChange={(e) => setPassword(e.target.value)}
+           />
+          <Button onClick={handleClick} disabled={isFetching}>INGRESAR</Button>
+          {error && <Error>Ups!, algo ha ido mal...</Error>}
           <Link>OLVIDASTE TU CONTRASEÑA?</Link>
           <Link>CREAR NUEVA CUENTA</Link>
         </Form>
