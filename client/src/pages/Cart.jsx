@@ -6,6 +6,13 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
+import { useSelector } from "react-redux";
+import StripeCheckout from "react-stripe-checkout";
+import { useEffect, useState } from "react";
+import { userRequest } from "../requestMethods";
+import { useNavigate  } from "react-router-dom";
+
+const KEY = process.env.REACT_APP_STRIPE;
 
 const Container = styled.div``;
 
@@ -146,6 +153,28 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
+  const cart = useSelector((state) => state.cart);
+  const [stripeToken, setStripeToken] = useState(null);
+  const navigate = useNavigate();
+
+  const onToken = (token) => {
+    setStripeToken(token);
+  };
+
+  useEffect(() => {
+    const makeRequest = async () => {
+      try {
+        const res = await userRequest.post("/checkout/payment", {
+          tokenId: stripeToken.id,
+          amount: 500,
+        });
+        navigate.push("/success", {
+          stripeData: res.data,
+          products: cart, });
+      } catch {}
+    };
+    stripeToken && makeRequest();
+  }, [stripeToken, cart.total, navigate]);
   return (
     <Container>
       <Navbar />
@@ -162,48 +191,63 @@ const Cart = () => {
         </Top>
         <Bottom>
           <Info>
-            <Product>
-              <ProductDetail>
-                <Image src="https://i.ibb.co/5Gd8FcX/desayuno.png" />
-                <Details>
-                  <ProductName>
-                    <b>Producto:</b> AMAPOLAS DE CUMPLEAÑOS
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 93813718293
-                  </ProductId>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <AddIcon />
-                  <ProductAmount>2</ProductAmount>
-                  <RemoveIcon />
-                </ProductAmountContainer>
-                <ProductPrice>$ 30</ProductPrice>
-              </PriceDetail>
-            </Product>
+          {cart.productos.map((producto) => (
+              <Product>
+                <ProductDetail>
+                  <Image src={producto.img} />
+                  <Details>
+                    <ProductName>
+                      <b>Product:</b> {producto.nombre}
+                    </ProductName>
+                    <ProductId>
+                      <b>ID:</b> {producto._id}
+                    </ProductId>
+                  </Details>
+                </ProductDetail>
+                <PriceDetail>
+                  <ProductAmountContainer>
+                    <AddIcon />
+                    <ProductAmount>{producto.cantidad}</ProductAmount>
+                    <RemoveIcon />
+                  </ProductAmountContainer>
+                  <ProductPrice>
+                    $ {producto.precio * producto.cantidad}
+                  </ProductPrice>
+                </PriceDetail>
+              </Product>
+            ))}
             <Hr />
           </Info>
           <Summary>
             <SummaryTitle>RESUMEN DE LA ORDEN</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Cargo por envío</SummaryItemText>
-              <SummaryItemPrice>$ 5.90</SummaryItemPrice>
+              <SummaryItemPrice>$ 3000</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Descuentos</SummaryItemText>
-              <SummaryItemPrice>$ -5.90</SummaryItemPrice>
+              <SummaryItemPrice>$ 0</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.total + 3000}</SummaryItemPrice>
             </SummaryItem>
-            <Button>PAGAR AHORA</Button>
+            <StripeCheckout
+              name="Dolce Tentazione"
+              image="https://i.ibb.co/3vV3Pz2/logo-removebg-preview.png"
+              billingAddress
+              shippingAddress
+              description={`El total de la compra $${cart.total}`}
+              amount={cart.total * 100}
+              token={onToken}
+              stripeKey={KEY}
+            >
+              <Button>PAGAR AHORA</Button>
+            </StripeCheckout>
           </Summary>
         </Bottom>
       </Wrapper>

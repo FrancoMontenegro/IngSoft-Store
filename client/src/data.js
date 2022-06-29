@@ -27,19 +27,19 @@ export const sliderItems = [
       id: 1,
       img: "https://i.ibb.co/5Gd8FcX/desayuno.png",
       title: "DESAYUNOS",
-      cat:"desayuno"
+      categoria:"desayuno"
     },
     {
       id: 2,
       img: "https://i.ibb.co/s2XLktk/tabla.png",
       title: "TABLAS",
-      cat:"tablas"
+      categoria:"tablas"
     },
     {
       id: 3,
       img: "https://i.ibb.co/DkB9fsX/otros.png",
       title: "OTROS",
-      cat:"otros"
+      categoria:"otros"
     },
   ];
 

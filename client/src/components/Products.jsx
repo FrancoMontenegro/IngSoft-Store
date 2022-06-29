@@ -11,8 +11,9 @@ const Container = styled.div`
     justify-content: space-between;
 `;
 
-const Products = ({categoria,sort}) => {
+const Products = ({categoria,filters,sort}) => {
 
+  console.log(categoria,filters,sort);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
@@ -31,9 +32,24 @@ const Products = ({categoria,sort}) => {
   }, [categoria]);
 
   useEffect(() => {
-    if (sort === "asc") {
+    categoria &&
+      setFilteredProducts(
+        products.filter((item) =>
+          Object.entries(filters).every(([key, value]) =>
+            item[key].includes(value)
+          )
+        )
+      );
+  }, [products, categoria, filters]);
+
+  useEffect(() => {
+    if (sort === "newest") {
       setFilteredProducts((prev) =>
-      [...prev].sort((a, b) => a.precio - b.precio)
+        [...prev].sort((a, b) => a.createdAt - b.createdAt)
+      );
+    } else if (sort === "asc") {
+      setFilteredProducts((prev) =>
+        [...prev].sort((a, b) => a.precio - b.precio)
       );
     } else {
       setFilteredProducts((prev) =>

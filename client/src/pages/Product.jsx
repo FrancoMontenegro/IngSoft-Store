@@ -122,8 +122,8 @@ const Button = styled.button`
 const Product = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
-  const [product, setProduct] = useState({});
-  const [quantity, setQuantity] = useState(1);
+  const [producto, setProduct] = useState({});
+  const [cantidad, setQuantity] = useState(1);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -139,16 +139,17 @@ const Product = () => {
 
   const handleQuantity = (type) => {
     if (type === "dec") {
-      quantity > 1 && setQuantity(quantity - 1);
+      cantidad > 1 && setQuantity(cantidad - 1);
     } else {
-      setQuantity(quantity + 1);
+      setQuantity(cantidad + 1);
     }
   };
 
   const handleClick = () => {
     dispatch(
-      addProduct({ ...product, quantity})
+      addProduct({ ...producto, cantidad})
     );
+    console.log("ola");
   };
 
 
@@ -158,17 +159,17 @@ const Product = () => {
       <Announcement />
       <Wrapper>
         <ImgContainer>
-          <Image src={product.img} />
+          <Image src={producto.img} />
         </ImgContainer>
         <InfoContainer>
-          <Title>{product.nombre}</Title>
-          <Desc>{product.desc}</Desc>
-          <Price>${product.precio}</Price>
+          <Title>{producto.nombre}</Title>
+          <Desc>{producto.desc}</Desc>
+          <Price>${producto.precio}</Price>
           
           <AddContainer>
             <AmountContainer>
               <RemoveIcon onClick={() => handleQuantity("dec")}/>
-              <Amount>{quantity}</Amount>
+              <Amount>{cantidad}</Amount>
               <AddIcon onClick={() => handleQuantity("inc")} />
             </AmountContainer>
             <Button onClick={handleClick}>AÑADIR AL CARRITO</Button>
