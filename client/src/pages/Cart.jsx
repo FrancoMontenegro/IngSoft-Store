@@ -168,9 +168,8 @@ const Cart = () => {
           tokenId: stripeToken.id,
           amount: 500,
         });
-        navigate.push("/success", {
-          stripeData: res.data,
-          products: cart, });
+        console.log(res.data);
+        navigate("/success", { state: { stripeData: res.data, products: cart }} );
       } catch {}
     };
     stripeToken && makeRequest();
@@ -197,7 +196,7 @@ const Cart = () => {
                   <Image src={producto.img} />
                   <Details>
                     <ProductName>
-                      <b>Product:</b> {producto.nombre}
+                      <b>Producto:</b> {producto.nombre}
                     </ProductName>
                     <ProductId>
                       <b>ID:</b> {producto._id}
@@ -241,7 +240,7 @@ const Cart = () => {
               image="https://i.ibb.co/3vV3Pz2/logo-removebg-preview.png"
               billingAddress
               shippingAddress
-              description={`El total de la compra $${cart.total}`}
+              description={`El total de la compra ${3000 + cart.total}`}
               amount={cart.total * 100}
               token={onToken}
               stripeKey={KEY}
